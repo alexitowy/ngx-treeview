@@ -164,5 +164,8 @@
       }
     }
   },
-  "defaultProject": "angular-ngx-treeview"
+  "defaultProject": "angular-ngx-treeview",
+  "cli": {
+    "analytics": false
+  }
 }

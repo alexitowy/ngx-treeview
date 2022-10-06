@@ -27,16 +27,16 @@ You can customize CSS yourself to break down dependencies to Bootstrap.
 
 ## Installation
 
-After install the above dependencies, install `ngx-treeview` via:
+After install the above dependencies, install `ngx-treeview-custom` via:
 
 ```shell
-npm install ngx-treeview --save
+npm install ngx-treeview-custom --save
 ```
 
 Once installed you need to import our main module in your application module:
 
 ```js
-import { TreeviewModule } from 'ngx-treeview';
+import { TreeviewModule } from 'ngx-treeview-custom';
 
 @NgModule({
   declarations: [AppComponent, ...],
