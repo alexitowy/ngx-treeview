@@ -6,8 +6,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build:lib": "ng build --prod ngx-treeview",
-    "build:demo": "ng build --prod",
+    "build:lib": "ng build ngx-treeview --configuration production",
+    "build:demo": "ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
