@@ -5,7 +5,7 @@
   <div ngxDropdownMenu aria-labelledby="dropdownMenu" (click)="$event.stopPropagation()">
     <div class="dropdown-container">
       <ngx-treeview [config]="config" [headerTemplate]="headerTemplate" [items]="items" [itemTemplate]="itemTemplate"
-        (selectedChange)="onSelectedChange($event)" (filterChange)="onFilterChange($event)">
+        (selectedChange)="onSelectedChange($event)" (filterChange)="onFilterChange($event)" [defaultSelected]="defaultSelect">
       </ngx-treeview>
     </div>
   </div>

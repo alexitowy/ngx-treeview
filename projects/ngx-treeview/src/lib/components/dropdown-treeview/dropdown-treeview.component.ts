@@ -17,16 +17,27 @@ export class DropdownTreeviewComponent {
   @Input() itemTemplate: TemplateRef<TreeviewItemTemplateContext>;
   @Input() items: TreeviewItem[];
   @Input() config: TreeviewConfig;
+  @Input() defaultSelect: any[];
   @Output() selectedChange = new EventEmitter<any[]>(true);
   @Output() filterChange = new EventEmitter<string>();
   @ViewChild(TreeviewComponent, { static: false }) treeviewComponent: TreeviewComponent;
   buttonLabel: string;
 
   constructor(
-    public i18n: TreeviewI18n,
-    private defaultConfig: TreeviewConfig
+    public i18n: TreeviewI18n
   ) {
-    this.config = this.defaultConfig;
+    this.config = TreeviewConfig.create(this.config);
+  }
+
+  ngOnInit(): void{
+    if (this.defaultSelect && this.defaultSelect.length > 0) {
+      this.getDefault(this.defaultSelect[0])
+    }
+  }
+
+  async getDefault(id: string){
+    const result = await this.config.urlCallbackById(id);
+    this.buttonLabel = result.valor;
   }
 
   onSelectedChange(values: any[]): void {

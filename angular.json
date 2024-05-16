@@ -58,8 +58,17 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "dev": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -137,6 +146,9 @@
           "configurations": {
             "production": {
               "tsConfig": "projects/ngx-treeview/tsconfig.lib.prod.json"
+            },
+            "dev": {
+              "tsConfig": "projects/ngx-treeview/tsconfig.lib.dev.json"
             }
           }
         },

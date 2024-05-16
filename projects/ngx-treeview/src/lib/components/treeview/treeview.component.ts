@@ -17,7 +17,8 @@ class FilterTreeviewItem extends TreeviewItem {
       disabled: item.disabled,
       checked: item.checked,
       collapsed: item.collapsed,
-      children: item.children
+      children: item.children,
+      lazy: item.lazy
     });
     this.refItem = item;
   }
@@ -52,6 +53,7 @@ export class TreeviewComponent implements OnChanges, OnInit {
   @Input() itemTemplate: TemplateRef<TreeviewItemTemplateContext>;
   @Input() items: TreeviewItem[];
   @Input() config: TreeviewConfig;
+  @Input() defaultSelected: any[];
   @Output() selectedChange = new EventEmitter<any[]>();
   @Output() filterChange = new EventEmitter<string>();
   headerTemplateContext: TreeviewHeaderTemplateContext;
@@ -141,7 +143,7 @@ export class TreeviewComponent implements OnChanges, OnInit {
     };
   }
 
-  private generateSelection(): void {
+  public generateSelection(): void {
     let checkedItems: TreeviewItem[] = [];
     let uncheckedItems: TreeviewItem[] = [];
     if (!isNil(this.items)) {
@@ -149,7 +151,6 @@ export class TreeviewComponent implements OnChanges, OnInit {
       checkedItems = selection.checked;
       uncheckedItems = selection.unchecked;
     }
-
     this.selection = {
       checkedItems,
       uncheckedItems
