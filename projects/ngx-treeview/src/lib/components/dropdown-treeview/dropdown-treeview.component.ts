@@ -30,9 +30,9 @@ export class DropdownTreeviewComponent {
   }
 
   ngOnInit(): void{
-    if (this.defaultSelect && this.defaultSelect.length > 0) {
+    /* if (this.defaultSelect && this.defaultSelect.length > 0) {
       this.getDefault(this.defaultSelect[0])
-    }
+    } */
   }
 
   async getDefault(id: string){

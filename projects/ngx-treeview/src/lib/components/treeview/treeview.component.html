@@ -1,7 +1,7 @@
 <ng-template #defaultItemTemplate let-item="item" let-onCollapseExpand="onCollapseExpand"
   let-onCheckedChange="onCheckedChange">
-  <div class="form-inline row-item">
-    <i *ngIf="item.children || item.lazy" (click)="onCollapseExpand()" aria-hidden="true" [ngSwitch]="item.collapsed">
+  <div class="form-inline row-item" >
+    <i *ngIf="item.children" (click)="onCollapseExpand()" aria-hidden="true" [ngSwitch]="item.collapsed">
       <svg *ngSwitchCase="true" width="0.8rem" height="0.8rem" viewBox="0 0 16 16" class="bi bi-caret-right-fill"
         fill="currentColor" xmlns="http://www.w3.org/2000/svg">
         <path

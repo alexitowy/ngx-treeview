@@ -15,6 +15,7 @@ export interface TreeItem {
   collapsed?: boolean;
   children?: TreeItem[];
   lazy?: boolean;
+  hidden?: boolean;
 }
 
 export class TreeviewItem {
@@ -26,6 +27,7 @@ export class TreeviewItem {
   value: any;
   nameLong: string;
   lazy: boolean;
+  hidden: boolean;
 
   constructor(item: TreeItem, autoCorrectChecked = false) {
     if (isNil(item)) {
@@ -40,6 +42,9 @@ export class TreeviewItem {
     this.nameLong = item.nameLong;
     if (isBoolean(item.lazy)) {
       this.lazy = item.lazy;
+    }
+    if (isBoolean(item.hidden)) {
+      this.hidden = item.hidden;
     }
     if (isBoolean(item.checked)) {
       this.checked = item.checked;

@@ -22,32 +22,59 @@ export class TreeviewItemComponent {
     this.config = this.defaultConfig;
   }
 
-  ngOnInit(): void{
-    console.log(this.defaultSelected)
+  ngOnInit(): void {
+    //console.log(this.item.hidden)
   }
 
   onCollapseExpand = async () => {
-    if(this.item.lazy){
+    /* if(this.item.lazy){
       if(!this.item.children){
         const result = await this.config.urlCallbackByIdParent(this.item.value);
         this.item.children = this.mapData(result);
         this.checkedBefore(this.item.children)
       }
+    } */
+    if (this.item.children.length > 0) {
+      this.item.children = this.showSubChildrens(this.item.children);
     }
     this.item.collapsed = !this.item.collapsed;
   }
 
-  checkedBefore(childrens: any[]){
+  checkedBefore(childrens: any[]) {
     for (let child of childrens) {
       if (this.defaultSelected.includes(child.value)) {
         child.checked = true;
       }
     }
   }
-  
-  mapData(data: any){
-    let currentItem = [];
+
+  showSubChildrens(data: any) {
+    console.log('PRIMER ELEMENTO PRUABE', data[2]);
+    const currentItem = [];
     data?.forEach((item: any) => {
+      const currentData: TreeviewItem = new TreeviewItem(item);
+      const currentSubChild = [];
+      if (item.children?.length > 0) {
+        item.children.forEach((subChild: any) => {
+          const childrenData: TreeviewItem = new TreeviewItem(subChild);
+          if (subChild.hidden) {
+            childrenData.hidden = false;
+          }
+          currentSubChild.push(childrenData)
+        })
+        currentData.children = currentSubChild;
+      }
+      currentItem.push(currentData);
+    });
+    console.log('PRIMER ELEMENTO CAMBIO', currentItem[2]);
+
+    return currentItem;
+  }
+
+  mapData(data: any) {
+    let currentItem = [];
+    console.log('PRIMER ELEMENTO PRUABE', data[1]);
+    /* data?.forEach((item: any) => {
       const splitLoc = (item.valor).split(">");
       const lastValor = splitLoc[splitLoc.length-1];
       item.lastValue = lastValor;
@@ -56,10 +83,12 @@ export class TreeviewItemComponent {
         text: item.lastValue,
         value: item.id,
         nameLong: item.nameLong,
-        lazy: !item.tieneHijos ? false : true
       });
-      currentData.collapsed = currentData?.children?.length > 0 || currentData.lazy ? true : undefined;
+      currentData.collapsed = currentData?.children?.length > 0
       currentData.checked = false;
+      if (item.children?.length > 0 && item.children?.children?.length > 0) {
+        console.log('EBTRA 3ER NIVEL');
+      }
       if (item.hasOwnProperty('isDisabled')) {
         currentData.disabled = item.isDisabled;
         // if(item?.isDisabled && currentData?.children?.length > 0){
@@ -71,7 +100,7 @@ export class TreeviewItemComponent {
         currentData.disabled = false;
       }
       currentItem.push(currentData);
-    });
+    }); */
     return currentItem;
   }
 
