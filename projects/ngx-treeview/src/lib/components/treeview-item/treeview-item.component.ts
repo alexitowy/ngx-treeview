@@ -23,7 +23,6 @@ export class TreeviewItemComponent {
   }
 
   ngOnInit(): void {
-    //console.log(this.item.hidden)
   }
 
   onCollapseExpand = async () => {
@@ -49,7 +48,6 @@ export class TreeviewItemComponent {
   }
 
   showSubChildrens(data: any) {
-    console.log('PRIMER ELEMENTO PRUABE', data[2]);
     const currentItem = [];
     data?.forEach((item: any) => {
       const currentData: TreeviewItem = new TreeviewItem(item);
@@ -66,14 +64,12 @@ export class TreeviewItemComponent {
       }
       currentItem.push(currentData);
     });
-    console.log('PRIMER ELEMENTO CAMBIO', currentItem[2]);
 
     return currentItem;
   }
 
   mapData(data: any) {
     let currentItem = [];
-    console.log('PRIMER ELEMENTO PRUABE', data[1]);
     /* data?.forEach((item: any) => {
       const splitLoc = (item.valor).split(">");
       const lastValor = splitLoc[splitLoc.length-1];
@@ -86,9 +82,6 @@ export class TreeviewItemComponent {
       });
       currentData.collapsed = currentData?.children?.length > 0
       currentData.checked = false;
-      if (item.children?.length > 0 && item.children?.children?.length > 0) {
-        console.log('EBTRA 3ER NIVEL');
-      }
       if (item.hasOwnProperty('isDisabled')) {
         currentData.disabled = item.isDisabled;
         // if(item?.isDisabled && currentData?.children?.length > 0){
