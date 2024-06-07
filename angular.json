@@ -137,6 +137,9 @@
           "configurations": {
             "production": {
               "tsConfig": "projects/ngx-treeview/tsconfig.lib.prod.json"
+            },
+            "dev": {
+              "tsConfig": "projects/ngx-treeview/tsconfig.lib.dev.json"
             }
           }
         },
