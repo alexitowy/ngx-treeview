@@ -22,43 +22,38 @@ class FilterTreeviewItem extends TreeviewItem {
     this.refItem = item;
   }
 
-  updateRefChecked(filterItems: TreeviewItem[]): void {
+  updateRefChecked(): void {
     if (this.children) {
-      this.children.forEach(child => {
-        let refChecked = this.checked;
+      let refChecked = this.checked;
+      this.children.forEach((child, index) => {
         if (refChecked && this.refItem.checked) {
-          if (child.checked) {
-            for (const refChild of this.refItem.children) {
-              refChild.checked = child.checked;
-              if (refChild.checked) {
-                refChecked = false;
-              } else {
-                refChild.checked = false;
-              }
-            }
+          for (const refChild of this.refItem.children) {
+            refChild.checked = child.checked ? child.checked : false;
           }
-
-          /* if (!isNil(child.children)) {
-            const newChild = new FilterTreeviewItem(child);
-            newChild.updateRefChecked();
-          } */
-
-          if (child instanceof TreeviewItem) {
-            this.refItem.checked = false;
-          }
+          refChecked = false;
         } else if (refChecked && !this.refItem.checked) {
-          //if (child.checked) {
           for (const refChild of this.refItem.children) {
             refChild.checked = false;
           }
           child.checked = false;
-          //}
+          refChecked = true
         }
-        this.refItem.checked = refChecked;
-        if (child instanceof FilterTreeviewItem) {
-          child.updateRefChecked(null);
+        if (child instanceof FilterTreeviewItem && !isNil(child.children)) {
+          child.updateRefChecked();
+        } else if (child instanceof FilterTreeviewItem && child.checked && isNil(child.children)) {
+          child.refItem.checked = true;
+        } else if (child instanceof TreeviewItem && child.checked) {
+          const newChild = new FilterTreeviewItem(child);
+          newChild.checked = child.checked;
+          newChild.refItem.checked = false;
+          newChild.updateRefChecked();
         }
       });
+      this.checked = refChecked;
+      this.collapsed = false;
+      this.refItem.checked = refChecked;
+    } else {
+      this.refItem.checked = true;
     }
   }
 }
@@ -128,7 +123,7 @@ export class TreeviewComponent implements OnChanges, OnInit {
     this.filterItems.forEach(item => {
       item.setCheckedRecursive(checked);
       if (item instanceof FilterTreeviewItem) {
-        item.updateRefChecked(null);
+        item.updateRefChecked();
       }
     });
 
@@ -139,12 +134,12 @@ export class TreeviewComponent implements OnChanges, OnInit {
     this.filterItems.forEach(parent => {
       if (parent instanceof FilterTreeviewItem) {
         //this.cleanTree(this.filterItems);
-        parent.updateRefChecked(this.filterItems);
+        parent.updateRefChecked();
       }
     })
 
     //this.updateCheckedOfAll();
-    this.raiseSelectedChange();
+    this.raiseSelectedChangeFilters();
   }
 
   cleanTree(listFilters: any[]) {
@@ -158,6 +153,14 @@ export class TreeviewComponent implements OnChanges, OnInit {
 
   raiseSelectedChange(): void {
     this.generateSelection();
+    const values = this.eventParser.getSelectedChange(this);
+    setTimeout(() => {
+      this.selectedChange.emit(values);
+    });
+  }
+
+  raiseSelectedChangeFilters(): void {
+    this.generateSelectionFilter();
     const values = this.eventParser.getSelectedChange(this);
     setTimeout(() => {
       this.selectedChange.emit(values);
@@ -179,6 +182,21 @@ export class TreeviewComponent implements OnChanges, OnInit {
     let uncheckedItems: TreeviewItem[] = [];
     if (!isNil(this.items)) {
       const selection = TreeviewHelper.concatSelection(this.items, checkedItems, uncheckedItems);
+      checkedItems = selection.checked;
+      uncheckedItems = selection.unchecked;
+    }
+
+    this.selection = {
+      checkedItems,
+      uncheckedItems
+    };
+  }
+
+  private generateSelectionFilter(): void {
+    let checkedItems: TreeviewItem[] = [];
+    let uncheckedItems: TreeviewItem[] = [];
+    if (!isNil(this.filterItems)) {
+      const selection = TreeviewHelper.concatSelection(this.filterItems, checkedItems, uncheckedItems);
       checkedItems = selection.checked;
       uncheckedItems = selection.unchecked;
     }
@@ -213,25 +231,22 @@ export class TreeviewComponent implements OnChanges, OnInit {
       const newItem = new FilterTreeviewItem(item);
       newItem.checked = item.checked;
       return newItem;
-    } else {
-      if (!isNil(item.children)) {
-        const children: FilterTreeviewItem[] = [];
-        item.children.forEach((child: TreeviewItem) => {
-          const newChild = this.filterItem(child, filterText);
-          if (!isNil(newChild)) {
-            children.push(newChild);
-          }
-        });
-        if (children.length > 0) {
-          const newItem = new FilterTreeviewItem(item);
-          newItem.collapsed = false;
-          newItem.children = children;
-          newItem.checked = item.checked;
-          return newItem;
+    } else if (!isNil(item.children)) {
+      const children: FilterTreeviewItem[] = [];
+      item.children.forEach((child: TreeviewItem) => {
+        const newChild = this.filterItem(child, filterText);
+        if (!isNil(newChild)) {
+          children.push(newChild);
         }
+      });
+      if (children.length > 0) {
+        const newItem = new FilterTreeviewItem(item);
+        newItem.collapsed = false;
+        newItem.children = children;
+        newItem.checked = item.checked;
+        return newItem;
       }
     }
-
     return undefined;
   }
 
