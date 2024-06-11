@@ -38,22 +38,42 @@ class FilterTreeviewItem extends TreeviewItem {
           child.checked = false;
           refChecked = true
         }
-        if (child instanceof FilterTreeviewItem && !isNil(child.children)) {
-          child.updateRefChecked();
-        } else if (child instanceof FilterTreeviewItem && child.checked && isNil(child.children)) {
-          child.refItem.checked = true;
-        } else if (child instanceof TreeviewItem && child.checked) {
+        
+        if (child instanceof FilterTreeviewItem){
+          if (child.checked && isNil(child.children)) {
+            child.refItem.checked = true;
+          }
+          if (!isNil(child.children)){
+            child.updateRefChecked();
+          }
+        } else if (child instanceof TreeviewItem) {
           const newChild = new FilterTreeviewItem(child);
-          newChild.checked = child.checked;
-          newChild.refItem.checked = false;
+          if (child.checked) {
+            newChild.checked = child.checked;
+            newChild.refItem.checked = false;
+          }
+          if (!isNil(child.children)) {
+            const children: FilterTreeviewItem[] = [];
+            child.children.forEach((item: TreeviewItem) => {
+              const newItem = new FilterTreeviewItem(item);
+              newItem.checked = item.checked;
+              newItem.refItem.checked = false;
+              children.push(newItem);
+            });
+            newChild.collapsed = false;
+            newChild.children = children;
+          }
           newChild.updateRefChecked();
         }
+        
+        this.checked = refChecked;
+        this.refItem.checked = refChecked;
+
       });
-      this.checked = refChecked;
-      this.collapsed = false;
-      this.refItem.checked = refChecked;
     } else {
-      this.refItem.checked = true;
+      if (this.checked && !this.refItem.checked) {
+        this.refItem.checked = true
+      }
     }
   }
 }
