@@ -245,26 +245,26 @@ export class TreeviewComponent implements OnChanges, OnInit {
       this.filterItems = filterItems;
     } else {
       this.filterItems = this.items;
-      this.showAll(this.filterItems, true);
+      this.showAll(this.filterItems);
     }
 
     this.updateCheckedOfAll();
   }
 
-  private showAll(array: TreeviewItem[], collapsed = false){
+  private showAll(array: TreeviewItem[]){
     array.forEach((el) => {
       if (!isNil(el.children)) {
-        this.showAll(el.children, collapsed);
+        this.showAll(el.children);
       }
       el.hidden = false;
-      el.collapsed = collapsed ? collapsed : el.collapsed;
+      el.collapsed = true;
     });
   }
 
   private filterItem(item: TreeviewItem, filterText: string): TreeviewItem {
     const isMatch = includes(item.text.toLowerCase(), filterText);
     if (isMatch) {
-      item.collapsed = false;
+      item.collapsed = true;
       item.hidden = false;
       return item;
     } else if (!isNil(item.children)) {
