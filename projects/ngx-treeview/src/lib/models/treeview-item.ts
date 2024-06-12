@@ -14,6 +14,7 @@ export interface TreeItem {
   checked?: boolean;
   collapsed?: boolean;
   children?: TreeItem[];
+  hidden?: boolean
 }
 
 export class TreeviewItem {
@@ -24,6 +25,7 @@ export class TreeviewItem {
   text: string;
   value: any;
   nameLong: string;
+  hidden: boolean = false;
 
   constructor(item: TreeItem, autoCorrectChecked = false) {
     if (isNil(item)) {
