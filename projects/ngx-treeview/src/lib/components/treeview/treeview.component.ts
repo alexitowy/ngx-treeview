@@ -139,8 +139,6 @@ export class TreeviewComponent implements OnChanges, OnInit {
   }
 
   onAllCheckedChange(): void {
-    console.log('entro');
-    
     const checked = this.allItem.checked;
     this.filterItems.forEach(item => {
       item.setCheckedRecursive(checked);
@@ -153,15 +151,12 @@ export class TreeviewComponent implements OnChanges, OnInit {
   }
 
   onItemCheckedChange(item: TreeviewItem, checked: boolean): void {
-    console.log('onItemCheckedChange', item, checked);
-    
     //! this.filterItems.forEach(parent => {
     //   if (parent instanceof FilterTreeviewItem) {
     //     //this.cleanTree(this.filterItems);
     //     parent.updateRefChecked();
     //   }
     // })
-
     //this.updateCheckedOfAll();
     this.raiseSelectedChangeFilters();
   }
@@ -265,7 +260,7 @@ export class TreeviewComponent implements OnChanges, OnInit {
   private filterItem(item: TreeviewItem, filterText: string): TreeviewItem {
     const isMatch = includes(item.text.toLowerCase(), filterText);
     if (isMatch) {
-      item.collapsed = false;
+      item.collapsed = true;
       item.hidden = false;
       return item;
     } else if (!isNil(item.children)) {
