@@ -74,9 +74,11 @@
 </div>
 <div [ngSwitch]="hasFilterItems">
   <div *ngSwitchCase="true" class="treeview-container" [style.max-height.px]="maxHeight">
-    <ngx-treeview-item *ngFor="let item of filterItems" [config]="config" [item]="item"
-      [template]="itemTemplate || defaultItemTemplate" (checkedChange)="onItemCheckedChange(item, $event)">
-    </ngx-treeview-item>
+    <ng-container *ngFor="let item of filterItems">
+      <ngx-treeview-item  *ngIf="!item.hidden" [config]="config" [item]="item"
+        [template]="itemTemplate || defaultItemTemplate" (checkedChange)="onItemCheckedChange(item, $event)">
+      </ngx-treeview-item>
+    </ng-container>
   </div>
   <div *ngSwitchCase="false" class="treeview-text">
     {{i18n.getFilterNoItemsFoundText()}}
