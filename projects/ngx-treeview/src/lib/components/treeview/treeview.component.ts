@@ -235,6 +235,7 @@ export class TreeviewComponent implements OnChanges, OnInit {
     if (this.filterText !== '') {
       const filterItems: TreeviewItem[] = [];
       const filterText = this.filterText.toLowerCase();
+      //kjuku
       this.showAll(this.items);
         this.items.forEach((item) => {
           const newItem = this.filterItem(item, filterText);
@@ -245,19 +246,19 @@ export class TreeviewComponent implements OnChanges, OnInit {
       this.filterItems = filterItems;
     } else {
       this.filterItems = this.items;
-      this.showAll(this.filterItems, true);
+      this.showAll(this.filterItems);
     }
 
     this.updateCheckedOfAll();
   }
 
-  private showAll(array: TreeviewItem[], collapsed = false){
+  private showAll(array: TreeviewItem[]){
     array.forEach((el) => {
       if (!isNil(el.children)) {
-        this.showAll(el.children, collapsed);
+        this.showAll(el.children);
       }
       el.hidden = false;
-      el.collapsed = collapsed ? collapsed : el.collapsed;
+      el.collapsed = true;
     });
   }
 
