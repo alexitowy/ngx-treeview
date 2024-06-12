@@ -235,6 +235,7 @@ export class TreeviewComponent implements OnChanges, OnInit {
     if (this.filterText !== '') {
       const filterItems: TreeviewItem[] = [];
       const filterText = this.filterText.toLowerCase();
+      this.showAll(this.items);
         this.items.forEach((item) => {
           const newItem = this.filterItem(item, filterText);
           if (!isNil(newItem)) {
@@ -244,17 +245,27 @@ export class TreeviewComponent implements OnChanges, OnInit {
       this.filterItems = filterItems;
     } else {
       this.filterItems = this.items;
+      this.showAll(this.filterItems, true);
     }
 
     this.updateCheckedOfAll();
   }
 
+  private showAll(array: TreeviewItem[], collapsed = false){
+    array.forEach((el) => {
+      if (!isNil(el.children)) {
+        this.showAll(el.children, collapsed);
+      }
+      el.hidden = false;
+      el.collapsed = collapsed ? collapsed : el.collapsed;
+    });
+  }
+
   private filterItem(item: TreeviewItem, filterText: string): TreeviewItem {
     const isMatch = includes(item.text.toLowerCase(), filterText);
     if (isMatch) {
-      // const newItem = item;
-      // newItem.checked = item.checked;
       item.collapsed = false;
+      item.hidden = false;
       return item;
     } else if (!isNil(item.children)) {
       const children: TreeviewItem[] = [];
@@ -268,10 +279,6 @@ export class TreeviewComponent implements OnChanges, OnInit {
         }
       });
       if (children.length > 0) {
-        // const newItem = item;
-        // newItem.collapsed = false;
-        // newItem.children = children;
-        // newItem.checked = item.checked;
         item.collapsed = false;
         item.hidden = false;
         return item;
