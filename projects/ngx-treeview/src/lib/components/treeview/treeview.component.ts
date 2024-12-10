@@ -178,8 +178,14 @@ export class TreeviewComponent implements OnChanges, OnInit {
     });
   }
 
+/**
+ * Genera y emite el cambio de selección basado en el array completo de elementos, 
+ * en lugar de un array previamente filtrado. Esto asegura que la selección refleje 
+ * todos los elementos disponibles, independientemente de filtros aplicados.
+ */
   raiseSelectedChangeFilters(): void {
-    this.generateSelectionFilter();
+     //this.generateSelectionFilter();
+    this.generateSelection();
     const values = this.eventParser.getSelectedChange(this);
     setTimeout(() => {
       this.selectedChange.emit(values);
@@ -211,6 +217,9 @@ export class TreeviewComponent implements OnChanges, OnInit {
     };
   }
 
+  /**
+ * @deprecated This function is no longer used.
+ */
   private generateSelectionFilter(): void {
     let checkedItems: TreeviewItem[] = [];
     let uncheckedItems: TreeviewItem[] = [];
@@ -223,7 +232,7 @@ export class TreeviewComponent implements OnChanges, OnInit {
     this.selection = {
       checkedItems,
       uncheckedItems
-    };
+    }; 
   }
 
   private updateFilterItems(): void {
